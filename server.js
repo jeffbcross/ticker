@@ -18,26 +18,32 @@ var wss = new WebSocketServer({
 var subManager = {
   sub: function (ws, intent) {
     this._subscriptions = this._subscriptions || {};
-    this._subscriptions[intent.model] = this._subscriptions[intent.model] || {};
-    this._subscriptions[intent.model][intent.query] = setInterval(function() {
+    this._subscriptions[ws.id] = this._subscriptions[ws.id] || {};
+    this._subscriptions[ws.id][intent.model] = this._subscriptions[ws.id][intent.model] || {};
+    var timerId = this._subscriptions[ws.id][intent.model][intent.query] = setInterval(function() {
       try {
         ws.send('newdata:'+intent.model+':'+intent.query+':'+getRandomData(intent.model))
       }
       catch(e) {
-        console.log('whatever, clearInterval');
-        clearInterval(this._subscriptions[intent.model][intent.query]);
+        console.error('whatever, clearInterval');
+        clearInterval(timerId);
       }
     }, (Math.random() * 2000) + 500);
   },
   unsub: function (ws, intent) {
     try {
-      clearInterval(this._subscriptions[intent.model][intent.query]);
+      clearInterval(this._subscriptions[ws.id][intent.model][intent.query]);
     }
     catch (e) {
       console.error('Could not clear subscription', e);
     }
   },
   cleanUpSocket: function (ws) {
+    for (var model in this._subscriptions[ws.id]) {
+      for (var query in this._subscriptions[ws.id][model]) {
+        this.unsub(ws, {model: model, query: query});
+      }
+    }
   }
 };
 
@@ -48,7 +54,6 @@ wss.on('connection', function(ws) {
     'Subscribe by: ws.send("sub:tickerUpdates:goog")');
   ws.on('message', function(msg) {
     var intent = parseMsg(msg);
-    console.log(intent);
     if (intent) {
       subManager[intent.action](ws, intent);
     }
@@ -56,6 +61,10 @@ wss.on('connection', function(ws) {
       console.log('msg received: ', msg);
       ws.send('thx for ur msg');
     }
+  });
+
+  ws.on('close', function() {
+    subManager.cleanUpSocket(ws);
   });
 
   function parseMsg(msg) {
