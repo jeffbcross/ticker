@@ -1,0 +1,1 @@
+exports.data = [{msg: 'Stock upgraded to buy'}];

@@ -1,0 +1,14 @@
+Ur stocks r awesome!
+<ul>
+  <li ng-repeat="stock in stocks"><a ng-href="/#/detail/{{stock.ticker}}" ng-bind="stock.name"></a></li>
+</ul>
+
+<h2>Ticker Updates</h2>
+<ul>
+  <li ng-repeat="(key, val) in tickerUpdates">
+    Updates for {{key}}<br>
+    <p ng-repeat="update in val">
+      {{update.msg}}
+    </p>
+  </li>
+</ul>
