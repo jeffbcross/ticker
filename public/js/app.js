@@ -64,14 +64,12 @@ angular.module('tickerApp', ['ngRoute']).
     socket.onmessage = function(msg) {
       console.log('msg received from server: ', msg.data);
       var parsed = socketParser(msg.data);
-      console.log('parsed', parsed);
       if (parsed) {
         $scope.$apply(function() {
           $scope[parsed.model] = $scope[parsed.model] || {};
           $scope[parsed.model][parsed.query] = $scope[parsed.model][parsed.query] || [];
-          $scope[parsed.model][parsed.query].push(parsed.data)
+          $scope[parsed.model][parsed.query].push(parsed.data);
         });
-
       }
     };
 
