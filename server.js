@@ -15,8 +15,11 @@ var wss = new WebSocketServer({
   port: 8001
 });
 
+console.log('http on port 8000\nwebsocket on port 8001');
+
 var subManager = {
   sub: function (ws, intent) {
+      console.log('in ----> ' + ws.id);
     this._subscriptions = this._subscriptions || {};
     this._subscriptions[ws.id] = this._subscriptions[ws.id] || {};
     this._subscriptions[ws.id][intent.model] = this._subscriptions[ws.id][intent.model] || {};
@@ -28,16 +31,22 @@ var subManager = {
         console.error('whatever, clearInterval');
         clearInterval(timerId);
       }
-    }, (Math.random() * 2000) + 500);
+    }, (Math.random() * 300) + 100);
   },
+
   unsub: function (ws, intent) {
     try {
-      clearInterval(this._subscriptions[ws.id][intent.model][intent.query]);
+      console.log('out <--- ' + ws.id);
+      var sub = this._subscriptions[ws.id] && this._subscriptions[ws.id][intent.model] && this._subscriptions[ws.id][intent.model][intent.query];
+      if(sub) {
+        clearInterval(sub);
+      }
     }
     catch (e) {
       console.error('Could not clear subscription', e);
     }
   },
+  
   cleanUpSocket: function (ws) {
     for (var model in this._subscriptions[ws.id]) {
       for (var query in this._subscriptions[ws.id][model]) {

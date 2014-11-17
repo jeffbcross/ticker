@@ -1,6 +1,9 @@
 Ur stocks r awesome!
 <ul>
-  <li ng-repeat="stock in stocks"><a ng-href="/#/detail/{{stock.ticker}}" ng-bind="stock.name"></a></li>
+  <li ng-repeat="stock in stocks">
+  	<a ng-href="/#/detail/{{stock.ticker}}" ng-bind="stock.name"></a>
+  	<label><input type="checkbox" ng-model="stock.subscribe" ng-change="toggleSubscription(stock)"/> show</label>
+  </li>
 </ul>
 
 <h2>Ticker Updates</h2>
