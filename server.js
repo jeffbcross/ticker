@@ -19,7 +19,6 @@ console.log('http on port 8000\nwebsocket on port 8001');
 
 var subManager = {
   sub: function (ws, intent) {
-      console.log('in ----> ' + ws.id);
     this._subscriptions = this._subscriptions || {};
     this._subscriptions[ws.id] = this._subscriptions[ws.id] || {};
     this._subscriptions[ws.id][intent.model] = this._subscriptions[ws.id][intent.model] || {};
@@ -36,7 +35,6 @@ var subManager = {
 
   unsub: function (ws, intent) {
     try {
-      console.log('out <--- ' + ws.id);
       var sub = this._subscriptions[ws.id] && this._subscriptions[ws.id][intent.model] && this._subscriptions[ws.id][intent.model][intent.query];
       if(sub) {
         clearInterval(sub);

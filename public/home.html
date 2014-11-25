@@ -1,17 +1,27 @@
-Ur stocks r awesome!
-<ul>
-  <li ng-repeat="stock in stocks">
-  	<a ng-href="/#/detail/{{stock.ticker}}" ng-bind="stock.name"></a>
-  	<label><input type="checkbox" ng-model="stock.subscribe" ng-change="toggleSubscription(stock)"/> show</label>
-  </li>
-</ul>
+<h3>Stockzzz</h3>
 
-<h2>Ticker Updates</h2>
+<table>
+	<thead>
+		<tr>
+			<th>subscribe</th>
+			<th>name</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="stock in ctrl.stocks">
+			<td>
+  			<a ng-href="/#/detail/{{stock.ticker}}">{{stock.name}}</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<h3>Stock Values</h3>
+
 <ul>
-  <li ng-repeat="(key, val) in tickerUpdates">
-    Updates for {{key}}<br>
-    <p ng-repeat="update in val">
-      {{update.price}}
-    </p>
-  </li>
+	<li ng-repeat="stock in ctrl.stocks">
+		<h5>{{stock.name}}</h5>
+		<pre>{{stock.ticks}}</pre>
+	</li>
 </ul>
