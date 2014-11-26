@@ -3,4 +3,12 @@
 
 <h3>{{ctrl.stock.name}} - ({{ctrl.stock.ticker}})</h3>
 
+<graph-container 
+	min-x="{{ctrl.minX}}" 
+	max-x="{{ctrl.maxX}}" 
+	min-y="{{ctrl.minY}}"
+	max-y="{{ctrl.maxY}}">
+	<graph-line data="ctrl.lineData"/>
+</graph-container>
+
 <pre>{{ctrl.ticks | json}}</pre>
